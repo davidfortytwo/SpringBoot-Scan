@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+  #!/usr/bin/env python
 # coding=utf-8
   ################
  #   AabyssZG   #
@@ -18,15 +18,15 @@ def logo():
  \$$    $$| $$    $$| $$      | $$| $$  | $$ \$$    $$| $$    $$ \$$    $$ \$$    $$  \$$  $$
   \$$$$$$ | $$$$$$$  \$$       \$$ \$$   \$$ _\$$$$$$$ \$$$$$$$   \$$$$$$   \$$$$$$    \$$$$ 
           | $$                              |  \__| $$                                       
-          | $$                               \$$    $$   [+] V2.51-2024年 龙年新春贺岁版     
-           \$$                                \$$$$$$    [+] 感谢一路上支持和关注我们的师傅  
+          | $$                               \$$    $$   [+] V2.51-2024 Year of the Dragon New Year Edition     
+           \$$                                \$$$$$$    [+] Thanks to all the masters who supported and followed us along the way  
             ______                                                                           
            /      \                                  +-------------------------------------+ 
           |  $$$$$$\  _______  ______   _______      + Version: 2.51                       + 
           | $$___\$$ /       \|      \ |       \     + Author: 曾哥(@AabyssZG)             + 
            \$$    \ |  $$$$$$$ \$$$$$$\| $$$$$$$\    + Whoami: https://github.com/AabyssZG + 
            _\$$$$$$\| $$      /      $$| $$  | $$    +-------------------------------------+ 
-          |  \__| $$| $$_____|  $$$$$$$| $$  | $$    + 多进程速度提升: Fkalis              + 
+          |  \__| $$| $$_____|  $$$$$$$| $$  | $$    + Speed improvement via multiprocessing: Fkalis              + 
            \$$    $$ \$$     \\$$    $$| $$  | $$    + Whoami: https://github.com/FFR66    + 
             \$$$$$$   \$$$$$$$ \$$$$$$$ \$$   \$$    +-------------------------------------+ 
 '''
@@ -34,17 +34,17 @@ def logo():
 
 def usage():
     print('''
-用法:
-        对单一URL进行信息泄露扫描:         python3 SpringBoot-Scan.py -u http://example.com/
-        读取目标TXT进行批量信息泄露扫描:    python3 SpringBoot-Scan.py -uf url.txt
-        对单一URL进行漏洞扫描:             python3 SpringBoot-Scan.py -v http://example.com/
-        读取目标TXT进行批量漏洞扫描：      python3 SpringBoot-Scan.py -vf url.txt
-        扫描并下载SpringBoot敏感文件:      python3 SpringBoot-Scan.py -d http://example.com/
-        使用HTTP代理并自动进行连通性测试:    python3 SpringBoot-Scan.py -p <代理IP:端口>
-        从TXT文件中导入自定义HTTP头部:       python3 SpringBoot-Scan.py -t header.txt
-        通过ZoomEye密钥进行API下载数据:      python3 SpringBoot-Scan.py -z <ZoomEye的API-KEY>
-        通过Fofa密钥进行API下载数据:         python3 SpringBoot-Scan.py -f <Fofa的API-KEY>
-        通过Hunter密钥进行API下载数据:       python3 SpringBoot-Scan.py -y <Hunter的API-KEY>
+Usage:
+    Scan a single URL for information leakage:         python3 SpringBoot-Scan.py -u http://example.com/
+    Read target TXT for batch information leakage scanning:    python3 SpringBoot-Scan.py -uf url.txt
+    Scan a single URL for vulnerabilities:             python3 SpringBoot-Scan.py -v http://example.com/
+    Read target TXT for batch vulnerability scanning:  python3 SpringBoot-Scan.py -vf url.txt
+    Scan and download SpringBoot sensitive files:      python3 SpringBoot-Scan.py -d http://example.com/
+    Use HTTP proxy and perform connectivity test:      python3 SpringBoot-Scan.py -p <proxy IP:port>
+    Import custom HTTP headers from TXT file:          python3 SpringBoot-Scan.py -t header.txt
+    Download data via ZoomEye API key:                 python3 SpringBoot-Scan.py -z <ZoomEye API-KEY>
+    Download data via Fofa API key:                    python3 SpringBoot-Scan.py -f <Fofa API-KEY>
+    Download data via Hunter API key:                  python3 SpringBoot-Scan.py -y <Hunter API-KEY>
 
 ██╗  ██╗ █████╗ ██████╗ ██████╗ ██╗   ██╗    ███╗   ██╗███████╗██╗    ██╗██╗   ██╗███████╗ █████╗ ██████╗ 
 ██║  ██║██╔══██╗██╔══██╗██╔══██╗╚██╗ ██╔╝    ████╗  ██║██╔════╝██║    ██║╚██╗ ██╔╝██╔════╝██╔══██╗██╔══██╗
@@ -52,27 +52,27 @@ def usage():
 ██╔══██║██╔══██║██╔═══╝ ██╔═══╝   ╚██╔╝      ██║╚██╗██║██╔══╝  ██║███╗██║  ╚██╔╝  ██╔══╝  ██╔══██║██╔══██╗
 ██║  ██║██║  ██║██║     ██║        ██║       ██║ ╚████║███████╗╚███╔███╔╝   ██║   ███████╗██║  ██║██║  ██║
 ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝        ╚═╝       ╚═╝  ╚═══╝╚══════╝ ╚══╝╚══╝    ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝
-                         [+] SpringBoot-Scan V2.51-2024年 龙年新春贺岁版
+                         [+] SpringBoot-Scan V2.51-2024 Year of the Dragon New Year Edition
 
-免责声明：
-        1.如果您下载、安装、使用、修改本工具及相关代码，即表明您信任本工具
-        2.在使用本工具时造成对您自己或他人任何形式的损失和伤害，我们不承担任何责任
-        3.如您在使用本工具的过程中存在任何非法行为，您需自行承担相应后果，我们将不承担任何法律及连带责任
-        4.请您务必审慎阅读、充分理解各条款内容，特别是免除或者限制责任的条款，并选择接受或不接受
-        5.除非您已阅读并接受本协议所有条款，否则您无权下载、安装或使用本工具
-        6.您的下载、安装、使用等行为即视为您已阅读并同意上述协议的约束
+Disclaimer:
+    1. By downloading, installing, using, or modifying this tool and related code, you indicate your trust in this tool.
+    2. We are not responsible for any form of loss or damage caused to you or others while using this tool.
+    3. You are responsible for any illegal activities conducted while using this tool. We are not liable for any legal or joint responsibilities.
+    4. Please read and fully understand each clause, especially those that exempt or limit liability, and choose to accept or not accept them.
+    5. Unless you have read and accepted all terms of this agreement, you do not have the right to download, install, or use this tool.
+    6. Your download, installation, and use constitute your agreement to be bound by this agreement.
         ''')
 
 """
-参数:
-        -u  --url       对单一URL进行信息泄露扫描
-        -uf  --urlfile  读取目标TXT进行批量信息泄露扫描  
-        -v  --vul       对单一URL进行漏洞利用
-        -vf  --vulfile  读取目标TXT进行批量漏洞扫描
-        -d  --dump      扫描并下载SpringBoot敏感文件（可提取敏感信息）
-        -p  --proxy     使用HTTP进行代理（默认连通性测试www.baidu.com）
-        -z  --zoomeye   通过对接ZoomEye的API批量下载Spring的资产测绘数据
-        -f  --fofa      通过对接Fofa的API批量下载Spring的资产测绘数据
-        -y  --hunter    通过对接Hunter的API批量下载Spring的资产测绘数据
-        -t  --newheader 从TXT文件中导入自定义HTTP头部
+Parameters:
+    -u  --url       Scan a single URL for information leakage
+    -uf  --urlfile  Read target TXT for batch information leakage scanning  
+    -v  --vul       Exploit vulnerabilities in a single URL
+    -vf  --vulfile  Read target TXT for batch vulnerability scanning
+    -d  --dump      Scan and download SpringBoot sensitive files (extract sensitive information)
+    -p  --proxy     Use HTTP proxy (default connectivity test www.baidu.com)
+    -z  --zoomeye   Batch download Spring asset mapping data via ZoomEye API
+    -f  --fofa      Batch download Spring asset mapping data via Fofa API
+    -y  --hunter    Batch download Spring asset mapping data via Hunter API
+    -t  --newheader Import custom HTTP headers from a TXT file
 """

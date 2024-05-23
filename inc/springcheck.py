@@ -4,14 +4,14 @@
  #   AabyssZG   #
 ################
 
-from inc import output,run,vul,console
+from inc import output, run, vul, console
 import requests, sys, hashlib, json
 from termcolor import cprint
 import requests.packages.urllib3
 requests.packages.urllib3.disable_warnings()
 
-def Spring_Check(url,proxies,header_new):
-    cprint("[.] 正在进行Spring的指纹识别","cyan")
+def Spring_Check(url, proxies, header_new):
+    cprint("[.] Performing Spring fingerprint recognition", "cyan")
     Spring_hash = "0488faca4c19046b94d07c3ee83cf9d6"
     Paths = ["favicon.ico", "AabyssZG666"]
     for path in Paths:
@@ -22,42 +22,40 @@ def Spring_Check(url,proxies,header_new):
             if "image" in content_type or "octet-stream" in content_type:
                 favicon_hash = hashlib.md5(r.content).hexdigest()
                 if favicon_hash == Spring_hash:
-                    cprint("[+] 站点Favicon是Spring图标，识别成功","red")
+                    cprint("[+] The site's favicon is a Spring icon, recognition successful", "red")
                     break
             elif r.text and ('timestamp' in r.text):
-                cprint("[+] 站点报错内容符合Spring特征，识别成功","red")
+                cprint("[+] The site's error content matches Spring characteristics, recognition successful", "red")
                 break
             else:
-                cprint("[-] 站点指纹不符合Spring特征，可能不是Spring框架","yellow")
+                cprint("[-] The site's fingerprint does not match Spring characteristics, it might not be a Spring framework", "yellow")
         except KeyboardInterrupt:
-            print("Ctrl + C 手动终止了进程")
+            print("Process manually terminated with Ctrl + C")
             sys.exit()
         except Exception as e:
-            print("[-] 发生错误，已记入日志error.log\n")
-            f2 = open("error.log", "a")
-            f2.write(str(e) + '\n')
-            f2.close()
+            print("[-] An error occurred, logged in error.log\n")
+            with open("error.log", "a") as f2:
+                f2.write(str(e) + '\n')
 
-def check(url,proxies,header_new):
+def check(url, proxies, header_new):
     header_new = json.loads(header_new)
-    if ('://' not in url):
-        url = str("http://") + str(url)
-    if str(url[-1]) != "/":
-        url = url + "/"
+    if '://' not in url:
+        url = "http://" + str(url)
+    if url[-1] != "/":
+        url += "/"
     try:
         requests.packages.urllib3.disable_warnings()
-        r = requests.get(url, timeout=6, verify=False, headers=header_new, proxies=proxies)  # 设置超时6秒
+        r = requests.get(url, timeout=6, verify=False, headers=header_new, proxies=proxies)
         if r.status_code == 503:
             sys.exit()
         else:
-            Spring_Check(url,proxies,header_new)
+            Spring_Check(url, proxies, header_new)
             return url
     except KeyboardInterrupt:
-        print("Ctrl + C 手动终止了进程")
+        print("Process manually terminated with Ctrl + C")
         sys.exit()
     except Exception as e:
-        cprint("[-] URL为 " + url + " 的目标积极拒绝请求，予以跳过！已记入日志error.log", "magenta")
-        f2 = open("error.log", "a")
-        f2.write(str(e) + '\n')
-        f2.close()
+        cprint(f"[-] The target URL {url} actively rejected the request, skipping! Logged in error.log", "magenta")
+        with open("error.log", "a") as f2:
+            f2.write(str(e) + '\n')
         sys.exit()

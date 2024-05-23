@@ -4,8 +4,8 @@
   #   AabyssZG   #
  #    Fkalis    #
 ################
-import itertools
 
+import itertools
 from inc import output, console
 import requests, sys, random, json
 from tqdm import tqdm
@@ -19,29 +19,31 @@ import aiohttp
 requests.packages.urllib3.disable_warnings()
 
 ua = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36,Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.93 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36,Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.17 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36,Mozilla/5.0 (X11; NetBSD) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.116 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.93 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.17 Safari/537.36",
+    "Mozilla/5.0 (X11; NetBSD) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.116 Safari/537.36",
     "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML like Gecko) Chrome/44.0.2403.155 Safari/537.36",
     "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27",
     "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20130406 Firefox/23.0",
-    "Opera/9.80 (Windows NT 5.1; U; zh-sg) Presto/2.9.181 Version/12.00"]
-
+    "Opera/9.80 (Windows NT 5.1; U; zh-sg) Presto/2.9.181 Version/12.00"
+]
 
 def JSON_handle(header1, header2):
     dict1 = json.loads(str(header1).replace("'", "\""))
     dict2 = json.loads(str(header2).replace("'", "\""))
-    # 合并两个字典
+    # Merge two dictionaries
     merged_dict = {**dict1, **dict2}
-    # 将合并后的字典转换为 JSON 字符串
+    # Convert the merged dictionary to a JSON string
     result_json = json.dumps(merged_dict, indent=2)
     return result_json
 
 def url(urllist, proxies, header_new):
-    f1 = open("urlout.txt", "wb+")
-    f1.close()
-    cprint(f"======开始对目标URL测试SpringBoot信息泄露端点======", "cyan")
-    sleeps = input("\n是否要延时扫描 (默认0秒): ")
+    with open("urlout.txt", "wb+"):
+        pass
+    cprint("====== Starting SpringBoot information leakage endpoint test for target URL ======", "cyan")
+    sleeps = input("\nDo you want to delay the scan (default 0 seconds): ")
     if sleeps == "":
         sleeps = int("0")
     with open("Dir.txt", 'r') as web:
@@ -53,42 +55,37 @@ def url(urllist, proxies, header_new):
             newheader = json.loads(str(JSON_handle(header, header_new)).replace("'", "\""))
             try:
                 requests.packages.urllib3.disable_warnings()
-                r = requests.get(url=u, headers=newheader, timeout=6, allow_redirects=False, verify=False, proxies=proxies)  # 设置超时6秒
+                r = requests.get(url=u, headers=newheader, timeout=6, allow_redirects=False, verify=False, proxies=proxies)
                 sleep(int(float(sleeps)))
                 if r.status_code == 503:
                     sys.exit()
-                if ((r.status_code == 200) and ('need login' not in r.text) and ('禁止访问' not in r.text) and (
-                        len(r.content) != 3318) and ('无访问权限' not in r.text) and ('认证失败' not in r.text)):
-                    cprint("[+] 状态码%d" % r.status_code + ' ' + "信息泄露URL为:" + u + '    ' + "页面长度为:" + str(
-                        len(r.content)), "red")
-                    f2 = open("urlout.txt", "a")
-                    f2.write(u + '\n')
-                    f2.close()
-                elif (r.status_code == 200):
-                    cprint(
-                        "[+] 状态码%d" % r.status_code + ' ' + "但无法获取信息 URL为:" + u + '    ' + "页面长度为:" + str(len(r.content)), "magenta")
+                if (r.status_code == 200 and 'need login' not in r.text and 'Forbidden' not in r.text and len(r.content) != 3318 and 'No access' not in r.text and 'Authentication failed' not in r.text):
+                    cprint("[+] Status code %d" % r.status_code + ' ' + "Information leakage URL: " + u + '    ' + "Page length: " + str(len(r.content)), "red")
+                    with open("urlout.txt", "a") as f2:
+                        f2.write(u + '\n')
+                elif r.status_code == 200:
+                    cprint("[+] Status code %d" % r.status_code + ' ' + "but unable to get information URL: " + u + '    ' + "Page length: " + str(len(r.content)), "magenta")
                 else:
-                    cprint("[-] 状态码%d" % r.status_code + ' ' + "无法访问URL为:" + u, "yellow")
+                    cprint("[-] Status code %d" % r.status_code + ' ' + "Unable to access URL: " + u, "yellow")
             except KeyboardInterrupt:
-                print("Ctrl + C 手动终止了进程")
+                print("Process manually terminated with Ctrl + C")
                 sys.exit()
             except Exception as e:
-                cprint("[-] URL为 " + u + " 的目标积极拒绝请求，予以跳过！", "magenta")
+                cprint("[-] URL " + u + " is actively rejecting requests, skipping!", "magenta")
     count = len(open("urlout.txt", 'r').readlines())
     if count >= 1:
         print('\n')
-        cprint("[+][+][+] 发现目标URL存在SpringBoot敏感信息泄露，已经导出至 urlout.txt ，共%d行记录" % count, "red")
+        cprint("[+][+][+] Found SpringBoot sensitive information leakage in target URL, exported to urlout.txt with %d records" % count, "red")
     else:
         print('\n')
-        cprint("[-] 目标URL没有存在SpringBoot敏感信息泄露", "yellow")
+        cprint("[-] No SpringBoot sensitive information leakage found in target URL", "yellow")
     sys.exit()
 
 def get_file(filename):
     with open(filename, 'r') as temp:
         temps = temp.readlines()
         for urls in temps:
-            url = urls.strip()
-            yield url
+            yield urls.strip()
 
 async def async_dir(url, proxies, header_new, semaphore, sleeps):
     try:
@@ -98,9 +95,9 @@ async def async_dir(url, proxies, header_new, semaphore, sleeps):
             web_lines = web.readlines()
             for web_line in web_lines:
                 web_line = web_line.strip()
-                if ('://' not in url):
-                    url = str("http://") + str(url)
-                if str(url[-1]) != "/":
+                if '://' not in url:
+                    url = "http://" + url
+                if url[-1] != "/":
                     u = url + "/" + web_line
                 else:
                     u = url + web_line
@@ -111,10 +108,9 @@ async def async_dir(url, proxies, header_new, semaphore, sleeps):
         for task in tasks:
             if not task.cancelled():
                 task.cancel()
-        cprint("[-] URL为 " + url + " 的目标积极拒绝请求，予以跳过！", "magenta")
-        f2 = open("error.log", "a")
-        f2.write(str(e) + '\n')
-        f2.close()
+        cprint("[-] URL " + url + " is actively rejecting requests, skipping!", "magenta")
+        with open("error.log", "a") as f2:
+            f2.write(str(e) + '\n')
 
 async def file(u, proxies, header_new):
     header = {"User-Agent": random.choice(ua)}
@@ -122,34 +118,32 @@ async def file(u, proxies, header_new):
     async with aiohttp.ClientSession() as session:
         async with session.get(url=u, headers=newheader, proxy=proxies, timeout=6, allow_redirects=False, ssl=False) as r:
             conntext = await r.text()
-            if ((r.status == 200) and ('need login' not in conntext) and ('禁止访问' not in conntext) and (len(conntext) != 3318) and ('无访问权限' not in conntext) and ('认证失败' not in conntext)):
-                cprint("[+] 状态码%d" % r.status + ' ' + "信息泄露URL为:" + u + '    ' + "页面长度为:" + str(len(conntext)), "red")
-                f2 = open("output.txt", "a")
-                f2.write(u + '\n')
-                f2.close()
+            if (r.status == 200 and 'need login' not in conntext and 'Forbidden' not in conntext and len(conntext) != 3318 and 'No access' not in conntext and 'Authentication failed' not in conntext):
+                cprint("[+] Status code %d" % r.status + ' ' + "Information leakage URL: " + u + '    ' + "Page length: " + str(len(conntext)), "red")
+                with open("output.txt", "a") as f2:
+                    f2.write(u + '\n')
             elif r.status == 200:
-                cprint(
-                    "[+] 状态码%d" % r.status + ' ' + "但无法获取信息 URL为:" + u + '    ' + "页面长度为:" + str(len(conntext)), "magenta")
+                cprint("[+] Status code %d" % r.status + ' ' + "but unable to get information URL: " + u + '    ' + "Page length: " + str(len(conntext)), "magenta")
             else:
-                cprint("[-] 状态码%d" % r.status + ' ' + "无法访问URL为:" + u, "yellow")
+                cprint("[-] Status code %d" % r.status + ' ' + "Unable to access URL: " + u, "yellow")
 
 async def file_semaphore(url, proxies, header_new, semaphore, sleeps):
     async with semaphore:
-        output = await file(url, proxies, header_new)
-        await asyncio.sleep(int(sleeps))  # 等待4秒
+        await file(url, proxies, header_new)
+        await asyncio.sleep(int(sleeps))
 
 async def file_main(urlfile, proxies, header_new):
     urls_lists = []
-    f1 = open("output.txt", "wb+")
-    f1.close()
-    cprint("======开始读取目标TXT并测试SpringBoot信息泄露端点======", "cyan")
+    with open("output.txt", "wb+"):
+        pass
+    cprint("====== Starting SpringBoot information leakage endpoint test for target TXT ======", "cyan")
     time_start = time.time()
-    sleeps = input("\n是否要延时扫描 (默认不延时，必须是整数): ")
+    sleeps = input("\nDo you want to delay the scan (default no delay, must be an integer): ")
     if sleeps == "":
         sleeps = "0"
     else:
         sleeps = int(sleeps)
-    max_concurrency = input("请输入最大并发数 (默认10): ")
+    max_concurrency = input("Enter maximum concurrency (default 10): ")
     if max_concurrency == "":
         max_concurrency = 10
     else:
@@ -160,7 +154,7 @@ async def file_main(urlfile, proxies, header_new):
     while True:
         try:
             urls_lists = list(itertools.islice(urls_itr, max_tasks))
-            if not urls_lists:  # 当urls_itr为空时，直接跳出循环
+            if not urls_lists:
                 break
             tasks = [async_dir(url, proxies, header_new, semaphore, sleeps) for url in urls_lists]
             await asyncio.gather(*tasks)
@@ -169,24 +163,20 @@ async def file_main(urlfile, proxies, header_new):
     count = len(open("output.txt", 'r').readlines())
     if count >= 1:
         print('\n')
-        cprint("[+][+][+] 发现目标TXT内存在SpringBoot敏感信息泄露，已经导出至 output.txt ，共%d行记录" % count, "red")
+        cprint("[+][+][+] Found SpringBoot sensitive information leakage in target TXT, exported to output.txt with %d records" % count, "red")
     else:
         print('\n')
-        cprint("[-] 目标TXT内没有存在SpringBoot敏感信息泄露", "yellow")
-    time_end = time.time()  # 记录结束时间
-    time_sum = time_end - time_start  # 计算的时间差为程序的执行时间，单位为秒/s
-    cprint("[+] 批量扫描共耗时 %s 秒" % time_sum, "red")
+        cprint("[-] No SpringBoot sensitive information leakage found in target TXT", "yellow")
+    time_end = time.time()
+    time_sum = time_end - time_start
+    cprint("[+] Batch scan took %s seconds" % time_sum, "red")
     sys.exit()
 
 def dump(urllist, proxies, header_new):
     def download(url: str, fname: str, proxies: str, newheader):
-        # 用流stream的方式获取url的数据
         requests.packages.urllib3.disable_warnings()
         resp = requests.get(url, headers=newheader, timeout=6, stream=True, verify=False, proxies=proxies)
-        # 拿到文件的长度，并把total初始化为0
         total = int(resp.headers.get('content-length', 0))
-        # 打开当前目录的fname文件(名字你来传入)
-        # 初始化tqdm，传入总数，文件名等数据，接着就是写入，更新等操作了
         with open(fname, 'wb') as file, tqdm(
                 desc=fname,
                 total=total,
@@ -198,8 +188,7 @@ def dump(urllist, proxies, header_new):
                 size = file.write(data)
                 bar.update(size)
 
-    cprint("======开始对目标URL测试SpringBoot敏感文件泄露并下载======", "cyan")
-    # 下载文件，并传入文件名
+    cprint("====== Starting SpringBoot sensitive file leakage test and download for target URL ======", "cyan")
     url1 = urllist + "actuator/heapdump"
     url2 = urllist + "heapdump"
     url3 = urllist + "heapdump.json"
@@ -211,52 +200,50 @@ def dump(urllist, proxies, header_new):
 
     try:
         if str(requests.head(url1)) != "<Response [200]>":
-            cprint("[-] 在 /actuator/heapdump 未发现heapdump敏感文件泄露", "yellow")
+            cprint("[-] No heapdump sensitive file leakage found at /actuator/heapdump", "yellow")
         else:
             url = url1
-            cprint("[+][+][+] 发现 /actuator/heapdump 敏感文件泄露" + ' ' + "下载端点URL为:" + url, "red")
+            cprint("[+][+][+] Found heapdump sensitive file leakage at /actuator/heapdump" + ' ' + "Download endpoint URL: " + url, "red")
             download(url, "heapdump", proxies, newheader)
             sys.exit()
         if str(requests.head(url2)) != "<Response [200]>":
-            cprint("[-] 在 /heapdump 未发现heapdump敏感文件泄露", "yellow")
+            cprint("[-] No heapdump sensitive file leakage found at /heapdump", "yellow")
         else:
             url = url2
-            cprint("[+][+][+] 发现 /heapdump 敏感文件泄露" + ' ' + "下载端点URL为:" + url, "red")
+            cprint("[+][+][+] Found heapdump sensitive file leakage at /heapdump" + ' ' + "Download endpoint URL: " + url, "red")
             download(url, "heapdump", proxies, newheader)
             sys.exit()
         if str(requests.head(url3)) != "<Response [200]>":
-            cprint("[-] 在 /heapdump.json 未发现heapdump敏感文件泄露", "yellow")
+            cprint("[-] No heapdump sensitive file leakage found at /heapdump.json", "yellow")
         else:
             url = url3
-            cprint("[+][+][+] 发现 /heapdump.json 敏感文件泄露" + ' ' + "下载端点URL为:" + url, "red")
+            cprint("[+][+][+] Found heapdump sensitive file leakage at /heapdump.json" + ' ' + "Download endpoint URL: " + url, "red")
             download(url, "heapdump.json", proxies, newheader)
             sys.exit()
         if str(requests.head(url4)) != "<Response [200]>":
-            cprint("[-] 在 /gateway/actuator/heapdump 未发现heapdump敏感文件泄露", "yellow")
+            cprint("[-] No heapdump sensitive file leakage found at /gateway/actuator/heapdump", "yellow")
         else:
             url = url4
-            cprint("[+][+][+] 发现 /gateway/actuator/heapdump 敏感文件泄露" + ' ' + "下载端点URL为:" + url, "red")
+            cprint("[+][+][+] Found heapdump sensitive file leakage at /gateway/actuator/heapdump" + ' ' + "Download endpoint URL: " + url, "red")
             download(url, "heapdump", proxies, newheader)
             sys.exit()
-        if str(requests.head(url5)) != ("<Response [401]>" or "<Response [200]>"):
-            cprint("[-] 在 /hystrix.stream 未发现hystrix监控数据文件泄露，请手动验证", "yellow")
+        if str(requests.head(url5)) != "<Response [401]>" and str(requests.head(url5)) != "<Response [200]>":
+            cprint("[-] No hystrix monitoring data file leakage found at /hystrix.stream, please verify manually", "yellow")
         else:
             url = url5
-            cprint("[+][+][+] 发现 /hystrix.stream 监控数据文件泄露" + ' ' + "下载端点URL为:" + url, "red")
+            cprint("[+][+][+] Found hystrix monitoring data file leakage at /hystrix.stream" + ' ' + "Download endpoint URL: " + url, "red")
             download(url, "hystrix.stream", proxies, newheader)
             sys.exit()
         if str(requests.head(url6)) != "<Response [200]>":
-            cprint("[-] 在 /artemis-portal/artemis/heapdump 未发现heapdump监控数据文件泄露，请手动验证", "yellow")
+            cprint("[-] No heapdump monitoring data file leakage found at /artemis-portal/artemis/heapdump, please verify manually", "yellow")
         else:
             url = url6
-            cprint("[+][+][+] 发现 /artemis-portal/artemis/heapdump 监控数据文件泄露" + ' ' + "下载端点URL为:" + url,
-                   "red")
+            cprint("[+][+][+] Found heapdump monitoring data file leakage at /artemis-portal/artemis/heapdump" + ' ' + "Download endpoint URL: " + url, "red")
             download(url, "heapdump", proxies, newheader)
             sys.exit()
-        sys.exit()
     except KeyboardInterrupt:
-        print("Ctrl + C 手动终止了进程")
+        print("Process manually terminated with Ctrl + C")
         sys.exit()
     except Exception as e:
-        print("[-] 下载失败，请手动尝试下载")
+        print("[-] Download failed, please try to download manually")
         sys.exit()
